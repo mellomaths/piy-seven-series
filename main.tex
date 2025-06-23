@@ -1,0 +1,107 @@
+\documentclass[12pt]{article}
+\usepackage{sbc-template}
+\usepackage{graphicx,url}
+\usepackage[brazil]{babel}   
+\usepackage[utf8]{inputenc} 
+\usepackage{listings}
+
+\sloppy
+
+\title{Formas de Obter o Número PI Computacionalmente}
+\author{Matheus Mello de Lima}
+\address{Professora: Cristiane Oliveira de Faria\\Cálculo IV - Ciência da Computação\\Universidade do Estado do Rio de Janeiro (UERJ)}
+\date{June 2025}
+
+\begin{document}
+
+\maketitle
+
+\begin{resumo} 
+  Este trabalho tem como objetivo explorar diferentes formas de obter o número  \begin{math}\pi\end{math} (Pi) computacionalmente utilizando sete abordagens clássicas: série de Leibniz (Alternada), série de Nilakantha, fórmula de Machin (1706), série de Euler (Basel Problem), fórmula de Ramanujan, algoritmo de Chudnovsky, e a fórmula de Bailey–Borwein–Plouffe (BBP).
+\end{resumo}
+
+\section{Introdução Histórica}
+
+Ao longo da história, diversos matemáticos contribuíram com séries e algoritmos que buscam uma aproximação precisa do número \begin{math}\pi\end{math} (Pi), além de precisos, esses métodos impulsionaram o desenvolvimento de conceitos matemáticos, servindo de base para avanços na análise numérica e na ciência da computação.
+
+Este trabalho analisa computacionalmente sete métodos para o cálculo de \begin{math}\pi\end{math} (Pi), comparando precisão, convergência ao utilizar diferentes tipos de variáveis (\textit{float} e \textit{double}).
+
+\subsection{Série de Leibniz}
+
+Gottfried Wilhelm Leibniz (1646 -- 1716) foi um filósofo e matemático alemão responsável por conceber ideias de Cálculo Diferencial e Integral. Até hoje, a notação de Leibniz é a forma convencional de escrever trabalhos matemáticos de Cálculo.
+
+Ele é considerado personalidade importante em diversas áreas de estudo com grandes contribuições à física e à tecnologia, e antecipou noções que surgiram muito mais tarde na teoria da probabilidade, biologia, medicina, geologia, psicologia, linguística e ciência da computação. A existência de pessoas com vasta experiência em diversas áreas, como Leibniz, se tornou cada vez mais raras na história da humanidade, principalmente após a Revolução Industrial (1760 –- 1840) e a disseminação da mão de obra especializada, por esta razão Leibniz é conhecido como o último gênio polímata.
+
+Apesar da Série de Leibniz carregar seu nome, Leibniz não foi o primeiro a descobrir esta série de Pi. Ela foi descoberta pela primeira vez pelo matemático indiano Mādhava de Sangamagrāma (1340 –- 1425). Mādhava, fundador da Escola de Astronomia e Matemática de Kerala, foi um matemático e astrônomo indiano com contribuições pioneiras ao estudo de séries infinitas e responsável pela descoberta de séries para as funções trigonométricas de seno, cosseno, arco-tangente e métodos para calcular a circunferência de um círculo. Mādhava de Sangamagrāma leva esse nome por ser natural de Sangamagrama, Reino de Cochim (atual Irinjalakuda, Kerala, Índia).
+
+Redescoberta em 1671 de forma independente por James Gregory e por Leibniz em 1673, a série de Leibniz, também conhecida por Série de Mādhava-Leibniz, é dada por:
+
+\[\pi=4\sum\limits_{k=0}^{\infty}\frac{(-1)^{k}}{2k + 1}\]
+
+\subsection{Série de Nilakantha}
+
+Keļallur Nīlakaṇṭha Somayāji (1444 -– 1544) foi um matemático e astrônomo da Escola de Astronomia e Matemática de Kerala. Nīlakaṇṭha trouxe discussões sobre em séries infinitas de funções trigonométricas e problemas de álgebra e geometria esférica, contribuindo para trabalhos do matemático indiano Aryabhata do século V.
+
+A série de Nīlakaṇṭha é definida por:
+
+\[\pi=3+\sum\limits_{k=1}^{\infty}\frac{4}{(2k)(2k+1)(2k+2)}\]
+
+\subsection{Fórmula de Machin}
+
+\[\frac{\pi}{4}=4\tan^{-1}(\frac{1}{5})-\tan^{-1}(\frac{1}{239})\]
+
+\subsection{Série de Euler}
+
+Embora não forneça \begin{math}\pi\end{math} (Pi) diretamente, Euler mostrou que pode ser usada para obter aproximações de \begin{math}\pi\end{math} (Pi).
+
+
+\[\sum\limits_{k=1}^{\infty}\frac{1}{k^{2}}=\frac{\pi^{2}}{6}\]
+
+
+\subsection{Fórmula de Ramanujan}
+
+\[\frac{1}{\pi}=\frac{2\sqrt{2}}{9801}\sum\limits_{k=0}^{\infty}\frac{(4k)!(1103+26390k)}{(k!)^{4}(396)^{4k}}\]
+
+\subsection{Algoritmo de Chudnovsky}
+
+\[\frac{1}{\pi}=12\sum\limits_{k=0}^{\infty}\frac{(-1)^{k}(6k)!(545140134k+13591409)}{(3k)!(k!)^{3}(640320)^{3k+3/2}}\]
+
+\subsection{Fórmula de Bailey–Borwein–Plouffe}
+
+\[\pi=\sum\limits_{k=0}^{\infty}\frac{1}{16^{k}}(\frac{4}{8k+1}-\frac{2}{8k+4}-\frac{1}{8k+5}-\frac{1}{8k+6})\]
+
+\section{Análise}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+    
+def incmatrix(genl1,genl2):
+    m = len(genl1)
+    n = len(genl2)
+    M = None #to become the incidence matrix
+    VT = np.zeros((n*m,1), int)  #dummy variable
+    
+    #compute the bitwise xor matrix
+    M1 = bitxormatrix(genl1)
+    M2 = np.triu(bitxormatrix(genl2),1) 
+
+    for i in range(m-1):
+        for j in range(i+1, m):
+            [r,c] = np.where(M2 == M1[i,j])
+            for k in range(len(r)):
+                VT[(i)*n + r[k]] = 1;
+                VT[(i)*n + c[k]] = 1;
+                VT[(j)*n + r[k]] = 1;
+                VT[(j)*n + c[k]] = 1;
+                
+                if M is None:
+                    M = np.copy(VT)
+                else:
+                    M = np.concatenate((M, VT), 1)
+                
+                VT = np.zeros((n*m,1), int)
+    
+    return M
+\end{lstlisting}
+
+\end{document}
